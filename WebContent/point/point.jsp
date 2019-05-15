@@ -35,15 +35,15 @@
   				<td> 번호 </td> <td>이름</td> <td>국어</td><td>영어</td><td>수학</td><td>총점</td><td>평균</td>
   			</tr>
   			
-  			<% for(int i=0; i<ar.size(); i++){%>
+  			<% for(PointDTO pointDTO : ar){%>
   			<tr>
-  				<td><%=ar.get(i).getNum()%></td> 				
-  				<td><a href="./pointSelect.jsp?num=<%=ar.get(i).getNum()%>"><%=ar.get(i).getName() %></a></td>
-  				<td><%=ar.get(i).getKor() %></td>
-  				<td><%=ar.get(i).getEng() %></td>
-  				<td><%=ar.get(i).getMath()%></td>
-  				<td><%=ar.get(i).getTotal()%></td>
-  				<td><%=ar.get(i).getAvg()%></td>
+  				<td><%=pointDTO.getNum()%></td> 				
+  				<td><a href="./pointSelect.jsp?num=<%=pointDTO.getNum()%>"><%=pointDTO.getName()%></a></td>
+  				<td><%=pointDTO.getKor() %></td>
+  				<td><%=pointDTO.getEng() %></td>
+  				<td><%=pointDTO.getMath()%></td>
+  				<td><%=pointDTO.getTotal()%></td>
+  				<td><%=pointDTO.getAvg()%></td>
   			</tr>
   			<%} %>
   			

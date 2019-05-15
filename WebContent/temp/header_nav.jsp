@@ -13,7 +13,7 @@
             <a class="nav-link" href="<%=application.getContextPath() %>/point/point.jsp">Point</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="services.html">Services</a>
+            <a class="nav-link" href="<%=application.getContextPath()%>/notice/noticeList.jsp">Notice</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="contact.html">Contact</a>
