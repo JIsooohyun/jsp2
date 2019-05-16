@@ -31,6 +31,18 @@
 		msg="insert success";
 	}
 	
+	request.setAttribute("message", msg);
+	//키 path
+	request.setAttribute("path", "./point.jsp");
+	
+	//common/result.jsp
+	//--forward
+	RequestDispatcher view = request.getRequestDispatcher("../common/test/result.jsp");//인자값으로 이동해야할 경로를 집어넣어라.
+	view.forward(request, response);
+	
+	//--redirect
+	//response.sendRedirect("../common/test/result.jsp");
+	
 %>
 <!DOCTYPE html>
 <html>

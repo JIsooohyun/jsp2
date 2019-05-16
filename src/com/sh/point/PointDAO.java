@@ -4,29 +4,51 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.sh.util.DBConnector;
 
 public class PointDAO {
-	public ArrayList<PointDTO> selectList() throws Exception{
+	
+	
+	//메서드명 getTotalCount
+	public int getTotalCount()throws Exception{
+		int result=0;
+		Connection conn = DBConnector.getConnect();
+		String sql = "select count(num) from point";
+		PreparedStatement st = conn.prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		rs.next();
+		result = rs.getInt(1);
+		DBConnector.disConnect(conn, st, rs);
+		return result;
+	}
+	
+	public ArrayList<PointDTO> selectList(String search, int startRow, int lastRow) throws Exception{
 		Connection conn = DBConnector.getConnect();
 		ArrayList<PointDTO> ar = new ArrayList<PointDTO>();
 		PointDTO pointDTO = null;
-		String sql = "select * from point";
+		String sql = "select * from " + 
+				"(select rownum R, p.* from  " + 
+				"(select * from point where name like ? order by num desc) p) " + 
+				"where R between ? and ?"; //컬럼명은 ?로 처리하면 안된다. 
 		
 		PreparedStatement st = conn.prepareStatement(sql);
+		st.setString(1, "%"+search+"%");
+		st.setInt(2, startRow);
+		st.setInt(3, lastRow);
 		
 		ResultSet rs = st.executeQuery();
 		
 		while(rs.next()) {
 			pointDTO = new PointDTO();
-			pointDTO.setNum(rs.getInt(1));
-			pointDTO.setName(rs.getString(2));
-			pointDTO.setKor(rs.getInt(3));
-			pointDTO.setEng(rs.getInt(4));
-			pointDTO.setMath(rs.getInt(5));
-			pointDTO.setTotal(rs.getInt(6));
-			pointDTO.setAvg(rs.getDouble(7));
+			pointDTO.setNum(rs.getInt("num"));
+			pointDTO.setName(rs.getString("name"));
+			pointDTO.setKor(rs.getInt("kor"));
+			pointDTO.setEng(rs.getInt("eng"));
+			pointDTO.setMath(rs.getInt("math"));
+			pointDTO.setTotal(rs.getInt("total"));
+			pointDTO.setAvg(rs.getDouble("avg"));
 			ar.add(pointDTO);
 		}
 		

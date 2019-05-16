@@ -9,6 +9,24 @@ import com.sh.point.PointDTO;
 import com.sh.util.DBConnector;
 
 public class NoticeDAO {
+	
+	public int getTotalCount()throws Exception{
+		int result=0;
+		Connection conn = DBConnector.getConnect();
+		String sql = "select count(num) from notice";
+		PreparedStatement st = conn.prepareStatement(sql);
+		
+		ResultSet rs = st.executeQuery();
+		
+		rs.next();
+		
+		result = rs.getInt(1);
+		
+		DBConnector.disConnect(conn, st, rs);
+		
+		return result;
+	}
+	
 	public int delete(int num)throws Exception{
 		Connection conn =  DBConnector.getConnect();
 		
@@ -75,14 +93,18 @@ public class NoticeDAO {
 		DBConnector.disConnect(conn, st);
 		return result;
 	}
-	public ArrayList<NoticeDTO> selectList() throws Exception{
+	public ArrayList<NoticeDTO> selectList(String search, int startRow, int lastRow) throws Exception{
 		Connection conn = DBConnector.getConnect();
 		ArrayList<NoticeDTO> ar = new ArrayList<NoticeDTO>();
 		NoticeDTO noticeDTO = null;
-		String sql = "select * from notice order by num desc";
+		String sql = "select * from"
+					+" (select rownum R, p.* from (select * from notice where title like ? order by num desc) p)"
+					+" where R between ? and ?";
 		
 		PreparedStatement st = conn.prepareStatement(sql);
-		
+		st.setString(1, search);
+		st.setInt(2, startRow);
+		st.setInt(3, lastRow);
 		ResultSet rs = st.executeQuery();
 		
 		while(rs.next()) {

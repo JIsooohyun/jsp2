@@ -42,8 +42,6 @@
 			<div class="container">
 				<a href="./pointUpdate.jsp?num=<%=pointDTO.getNum()%>">Update</a>
 				<a href="./pointDelete.jsp?num=<%=pointDTO.getNum()%>">DELETE</a>
-				<button class="btn" title="pointUpdate">Update</button>
-				<button class="btn" title="pointDelete">Delete</button>
 			</div>
 		<%}else{ %>
 			<h1>번호가 없다.</h1>

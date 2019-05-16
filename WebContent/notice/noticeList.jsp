@@ -6,7 +6,51 @@
 	pageEncoding="UTF-8"%>
 <%
 	NoticeDAO noticeDAO = new NoticeDAO();
-	ArrayList<NoticeDTO> ar = noticeDAO.selectList();
+	int curPage = 1;
+	try {
+		curPage = Integer.parseInt(request.getParameter("curPage"));
+	} catch (Exception e) {
+
+	}
+
+	int perPage = 10;
+	int startRow = (curPage - 1) * perPage + 1; // rownum 1번부터
+	int lastRow = curPage * perPage; // 10까지 가져오게 설정 페이지 안에 들어오는 숫자가 
+
+	//1. 총글의 갯수
+	int totalCount = noticeDAO.getTotalCount();//103개
+
+	//2. 총페이지의 갯수
+	int totalPage = totalCount / perPage; //103/10 -> totalPage = 10개
+	if (totalCount % perPage != 0) { //103%10 나머지 3이니까 총 페이지갯수는 11개
+		totalPage++;
+	}
+
+	//3. 한블럭당 번호가 몇개씩 보일건가
+	int perBlock = 5; //1 2 3 4 5 [다음] 6 7 8 9 10
+
+	//4. 총 block 수
+	int totalBlock = totalPage / perBlock;//11/5 totalBlock=2;
+	if (totalPage % perBlock != 0) { //나머지가 1이므로 
+		totalBlock++; //totalBlock = 3;
+	}
+
+	// 5. curPage를 이용해서 현재 Block번호 찾기
+	int curBlock = curPage / perBlock; //ex) 8/5 => 1
+	if (curPage % perBlock != 0) {
+		curBlock++; //curBlock = 2;
+	}
+	//startNum과 lastNum은 페이지 번호가 시작하고 끝나는 부분을 말한다.
+	//6. curBlock에서 startNum과 lastNum찾기
+	int startNum = (curBlock - 1) * perBlock + 1; //(1*5)+1= 6;
+	int lastNum = curBlock * perBlock; // 2*5 = 10;
+	if (startNum < 1) {
+		startNum = 1;
+	}
+	if (curBlock == totalBlock) {
+		lastNum = totalPage;
+	}
+	ArrayList<NoticeDTO> ar = noticeDAO.selectList(startRow, lastRow);
 %>
 
 <title>Insert title here</title>
@@ -15,7 +59,6 @@
 .main {
 	min-height: 800px;
 }
-
 </style>
 <body>
 	<%@ include file="../temp/header_nav.jsp"%>
@@ -46,7 +89,40 @@
 					}
 				%>
 			</table>
+		</div>
+		<div class="row">
+			<form action="./point.jsp">
+				<select name="kind">
+					<option value="t">제목</option>
+					<option value="w">작성자</option>
+					<option value="c">내용</option>
+				</select> <input type="text" name="search">
+				<button>search</button>
+			</form>
+		</div>
 
+		<div>
+			<%
+				if (curBlock > 1) {
+			%>
+			<a href="./noticeList.jsp?curPage=<%=startNum - 1%>">[이전]</a>
+			<%
+				}
+			%>
+			<%
+				for (int i = startNum; i <= lastNum; i++) {
+			%>
+			<a href="./noticeList.jsp?curPage=<%=i%>"><%=i%></a>
+			<%
+				}
+			%>
+			<%
+				if (curBlock < totalBlock) {
+			%>
+			<a href="./noticeList.jsp?curPage=<%=lastNum + 1%>">[다음]</a>
+			<%
+				}
+			%>
 		</div>
 		<div>
 			<form id="frm" action="./noticeSelect.jsp">
