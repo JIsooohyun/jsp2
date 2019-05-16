@@ -27,8 +27,6 @@
 	if(kind==null){
 		kind="";
 	}
-	System.out.println("kind"+kind);
-	System.out.println("search"+search);
 	
 	int perPage=10;
 	int startRow = (curPage-1)*perPage+1;  
