@@ -22,7 +22,8 @@ response.setCharacterEncoding("UTF-8");
 		request.setAttribute("message", "Login Fail");
 		request.setAttribute("path", "./memberLogin.jsp");
 		RequestDispatcher view = request.getRequestDispatcher("../common/test/result.jsp");
-		view.forward(request, response);
+		view.forward(request, response);//페이지 이동시 request, response를 생성할 때 process에서 값을 받고 
+		//또 그 값을 result로 넘겨서 응답받을 것을 받기 위해서 두개다  forward방식으로 보낸다. 
 	}
 %>
 <!DOCTYPE html>
