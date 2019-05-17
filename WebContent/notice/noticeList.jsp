@@ -12,13 +12,28 @@
 	} catch (Exception e) {
 
 	}
-
+	String search = request.getParameter("search");
+	if(search==null){
+		search="";
+	}
+	String kind = request.getParameter("kind");
+	if(kind==null){
+		kind="title";
+	}else if(kind.equals("t")){
+		kind="title";
+	}else if(kind.equals("c")){
+		kind="contents";
+	}else if(kind.equals("w")){
+		kind="writer";
+	}else{
+		kind="title";
+	}
 	int perPage = 10;
 	int startRow = (curPage - 1) * perPage + 1; // rownum 1번부터
 	int lastRow = curPage * perPage; // 10까지 가져오게 설정 페이지 안에 들어오는 숫자가 
 
 	//1. 총글의 갯수
-	int totalCount = noticeDAO.getTotalCount();//103개
+	int totalCount = noticeDAO.getTotalCount(kind, search);//103개
 
 	//2. 총페이지의 갯수
 	int totalPage = totalCount / perPage; //103/10 -> totalPage = 10개
@@ -50,7 +65,7 @@
 	if (curBlock == totalBlock) {
 		lastNum = totalPage;
 	}
-	ArrayList<NoticeDTO> ar = noticeDAO.selectList(startRow, lastRow);
+	ArrayList<NoticeDTO> ar = noticeDAO.selectList(kind, search, startRow, lastRow);
 %>
 
 <title>Insert title here</title>
@@ -91,7 +106,7 @@
 			</table>
 		</div>
 		<div class="row">
-			<form action="./point.jsp">
+			<form action="./noticeList.jsp">
 				<select name="kind">
 					<option value="t">제목</option>
 					<option value="w">작성자</option>
@@ -105,21 +120,21 @@
 			<%
 				if (curBlock > 1) {
 			%>
-			<a href="./noticeList.jsp?curPage=<%=startNum - 1%>">[이전]</a>
+			<a href="./noticeList.jsp?curPage=<%=startNum - 1%>&kind=<%=kind%>&search=<%=search%>">[이전]</a>
 			<%
 				}
 			%>
 			<%
 				for (int i = startNum; i <= lastNum; i++) {
 			%>
-			<a href="./noticeList.jsp?curPage=<%=i%>"><%=i%></a>
+			<a href="./noticeList.jsp?curPage=<%=i%>&kind=<%=kind%>&search=<%=search%>"><%=i%></a>
 			<%
 				}
 			%>
 			<%
 				if (curBlock < totalBlock) {
 			%>
-			<a href="./noticeList.jsp?curPage=<%=lastNum + 1%>">[다음]</a>
+			<a href="./noticeList.jsp?curPage=<%=lastNum + 1%>&kind=<%=kind%>&search=<%=search%>">[다음]</a>
 			<%
 				}
 			%>

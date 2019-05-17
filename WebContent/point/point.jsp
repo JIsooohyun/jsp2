@@ -20,12 +20,17 @@
 		
 	}
 	String search = request.getParameter("search");
-	String kind = request.getParameter("kind");
 	if(search==null){
 		search="";
 	}
+	
+	String kind = request.getParameter("kind");
 	if(kind==null){
-		kind="";
+		kind="name";
+	}else if(kind.equals("n")){
+		kind="name";
+	}else if(kind.equals("k")){
+		kind="kor";
 	}
 	
 	int perPage=10;
@@ -33,7 +38,7 @@
 	int lastRow=curPage*perPage;
 	
 	//1.총글의 갯수
-	int totalCount =  pointDAO.getTotalCount();
+	int totalCount =  pointDAO.getTotalCount(kind, search);
 	//2.총페이지의 갯수
 	int totalPage = totalCount/perPage;
 	if(totalCount%perPage!=0){
@@ -69,7 +74,7 @@
 	if(curBlock==totalBlock){
 		lastNum=totalPage;
 	}
-	ArrayList<PointDTO> ar = pointDAO.selectList(search,startRow, lastRow);
+	ArrayList<PointDTO> ar = pointDAO.selectList(kind, search,startRow, lastRow);
 	
 %>
 	
@@ -111,22 +116,21 @@
 	<div class="row">
 			<form action="./point.jsp">
 				<select name="kind">
-					<option value="t">제목</option>
-					<option value="w">작성자</option>
-					<option value="c">내용</option>
+					<option value="n">이름</option>
+					<option value="k">국어점수</option>
 				</select> <input type="text" name="search">
 				<button>search</button>
 			</form>
 		</div>
 	<div class="row">
 	<%if(curBlock>1){ %>
-		<a href="./point.jsp?curPage=<%=startNum-1%>">[이전]</a>
+		<a href="./point.jsp?curPage=<%=startNum-1%>&kind=<%=kind%>&search=<%=search%>">[이전]</a>
 	<%} %>
 		<%for(int i=startNum; i<=lastNum; i++) {%>
-			<a href="./point.jsp?curPage=<%=i%>"><%=i%></a>
+			<a href="./point.jsp?curPage=<%=i%>&kind=<%=kind%>&search=<%=search%>"><%=i%></a>
 		<%}%>
 	<%if(curBlock<totalBlock){ %>
-		<a href="./point.jsp?curPage=<%=lastNum+1%>">[다음]</a>
+		<a href="./point.jsp?curPage=<%=lastNum+1%>&kind=<%=kind%>&search=<%=search%>">[다음]</a>
 	<%} %>
 	</div>
   	<div class="row">

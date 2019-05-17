@@ -12,25 +12,26 @@ public class PointDAO {
 	
 	
 	//메서드명 getTotalCount
-	public int getTotalCount()throws Exception{
+	public int getTotalCount(String kind, String search)throws Exception{
 		int result=0;
 		Connection conn = DBConnector.getConnect();
-		String sql = "select count(num) from point";
+		String sql = "select count(num) from point where "+kind+" like ?";
 		PreparedStatement st = conn.prepareStatement(sql);
+		st.setString(1, "%"+search+"%");
 		ResultSet rs = st.executeQuery();
 		rs.next();
-		result = rs.getInt(1);
+		result = rs.getInt("count(num)");
 		DBConnector.disConnect(conn, st, rs);
 		return result;
 	}
 	
-	public ArrayList<PointDTO> selectList(String search, int startRow, int lastRow) throws Exception{
+	public ArrayList<PointDTO> selectList(String kind, String search, int startRow, int lastRow) throws Exception{
 		Connection conn = DBConnector.getConnect();
 		ArrayList<PointDTO> ar = new ArrayList<PointDTO>();
 		PointDTO pointDTO = null;
 		String sql = "select * from " + 
 				"(select rownum R, p.* from  " + 
-				"(select * from point where name like ? order by num desc) p) " + 
+				"(select * from point where "+kind+" like ? order by num desc) p) " + 
 				"where R between ? and ?"; //컬럼명은 ?로 처리하면 안된다. 
 		
 		PreparedStatement st = conn.prepareStatement(sql);

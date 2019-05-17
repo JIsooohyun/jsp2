@@ -10,17 +10,18 @@ import com.sh.util.DBConnector;
 
 public class NoticeDAO {
 	
-	public int getTotalCount()throws Exception{
+	public int getTotalCount(String kind, String search)throws Exception{
 		int result=0;
 		Connection conn = DBConnector.getConnect();
-		String sql = "select count(num) from notice";
+		String sql = "select count(num) from notice where "+kind+" like ?";
 		PreparedStatement st = conn.prepareStatement(sql);
 		
+		st.setString(1, "%"+search+"%");
 		ResultSet rs = st.executeQuery();
 		
 		rs.next();
 		
-		result = rs.getInt(1);
+		result = rs.getInt("count(num)");
 		
 		DBConnector.disConnect(conn, st, rs);
 		
@@ -93,16 +94,17 @@ public class NoticeDAO {
 		DBConnector.disConnect(conn, st);
 		return result;
 	}
-	public ArrayList<NoticeDTO> selectList(String search, int startRow, int lastRow) throws Exception{
+	public ArrayList<NoticeDTO> selectList(String kind, String search, int startRow, int lastRow) throws Exception{
 		Connection conn = DBConnector.getConnect();
 		ArrayList<NoticeDTO> ar = new ArrayList<NoticeDTO>();
 		NoticeDTO noticeDTO = null;
-		String sql = "select * from"
-					+" (select rownum R, p.* from (select * from notice where title like ? order by num desc) p)"
-					+" where R between ? and ?";
+		String sql = "select * from "
+					+"(select rownum R, p.* from "
+					+"(select * from notice where "+kind+" like ? order by num desc) p) "
+					+"where R between ? and ?";
 		
 		PreparedStatement st = conn.prepareStatement(sql);
-		st.setString(1, search);
+		st.setString(1, "%"+search+"%");
 		st.setInt(2, startRow);
 		st.setInt(3, lastRow);
 		ResultSet rs = st.executeQuery();
