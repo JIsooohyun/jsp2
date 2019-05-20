@@ -17,7 +17,7 @@
 
 	//쿠키 생성
 	if (check!=null) {
-		Cookie c = new Cookie("check", memberDTO.getId()); //("쿠키이름", value);
+		Cookie c = new Cookie("check", memberDTO.getId()); //("쿠키이름", value); 이름 : 각각의 쿠키를 구별하는데 사용되는 이름
 		c.setMaxAge(60*60*4_27);	
 		response.addCookie(c);
 	}else{

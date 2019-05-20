@@ -31,7 +31,7 @@
 <div class="row">
 <div class="container main">
   <h2>Login Form</h2>
-  <form action="./memberLoginProcess.jsp?" method="post">
+  <form action="./memberLoginProcess.jsp" method="post">
     <div class="form-group">
       <label for="id">Id:</label>
       <input type="text" class="form-control" id="id" placeholder="Enter id" name="id" value="<%=rid%>">
