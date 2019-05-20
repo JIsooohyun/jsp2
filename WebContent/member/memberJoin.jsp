@@ -22,10 +22,10 @@
 			<h2>Join form</h2>
 			<form action="./memberJoinProcess.jsp" name="jj" id="frm" method="post">
 				<div class="form-group">
-					<label for="id">Id:</label> <input type="text" class="form-control"
-						id="id" placeholder="Enter Id" name="id"> <input
-						type="button" value="중복확인" id="check"> 
-						<input type="checkbox" id="different">
+					<label for="id">Id:</label> 
+					<input type="text" class="form-control" id="id" placeholder="Enter Id" name="id"> 
+					<input type="hidden" id="idConfirm" value="0">
+					<input type="button" value="중복확인" id="idcheck"> 
 				</div>
 				<div class="form-group">
 					<label for="pwd">Password:</label> <input type="password"
@@ -71,8 +71,9 @@
 	<script type="text/javascript">
 	$(function() {
 		//새창 여는 코드
-		$('#check').click(function() {
-			open("./idcheck.jsp","_blank", "width=500, height=300");
+		$('#idcheck').click(function() {
+			var id = $('#id').val();
+			open('./idcheck.jsp?id='+id,"_blank", "width=500, height=300");
 		});
 		
 		//ID 10자 미만
@@ -129,10 +130,7 @@
 				}else if($('#pwd').val().length<6){
 					alert("비밀번호 6글자 이상 입력해주세요");
 					joincheck=false;
-				} else if(!$('#different').prop('checked')){
-					joincheck=false;
-					alert("중복확인 해주세요");
-				} 
+				}
 				
 				if(joincheck){
 					$('#frm').submit();

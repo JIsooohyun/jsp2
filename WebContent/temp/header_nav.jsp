@@ -19,7 +19,7 @@
           <% MemberDTO memberDTO = (MemberDTO)session.getAttribute("member"); %>
           <% if(memberDTO != null) {%>
           <li class="nav-item">
-          	<a class="nav-link" href="<%=application.getContextPath()%>/member/memberMypage.jsp">My Page</a>
+          	<a class="nav-link" href="<%=application.getContextPath()%>/member/memberMyPage.jsp">My Page</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="<%=application.getContextPath()%>/member/memberLogout.jsp">Logout</a>

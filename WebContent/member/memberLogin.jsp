@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	Cookie [] cookies = request.getCookies();
+	String rid = "";
+	for(Cookie c : cookies){
+		if(c.getName().equals("check")){
+			rid=c.getValue();
+		}
+	}
+%>
 <jsp:include page="../temp/css_meta.jsp"/>
 <html>
 <head>
@@ -9,7 +18,6 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-
 </script>
 <style type="text/css">
 	.main{
@@ -23,10 +31,10 @@
 <div class="row">
 <div class="container main">
   <h2>Login Form</h2>
-  <form action="./memberLoginProcess.jsp" method="post">
+  <form action="./memberLoginProcess.jsp?" method="post">
     <div class="form-group">
       <label for="id">Id:</label>
-      <input type="text" class="form-control" id="id" placeholder="Enter id" name="id">
+      <input type="text" class="form-control" id="id" placeholder="Enter id" name="id" value="<%=rid%>">
     </div>
     <div class="form-group">
       <label for="pw">Password:</label>

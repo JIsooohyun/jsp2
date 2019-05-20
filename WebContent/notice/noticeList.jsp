@@ -144,9 +144,11 @@
 				<input type="hidden" name="num" class="inp">
 			</form>
 		</div>
+		<%if(memberDTO!=null && memberDTO.getId().equals("admin")){%>
 		<div class="row">
 			<a class="btn btn-primary" href="./noticeWrite.jsp">Write</a>
 		</div>
+		<%}%>
 	</div>
 	<%@ include file="../temp/footer.jsp"%>
 	<script type="text/javascript">

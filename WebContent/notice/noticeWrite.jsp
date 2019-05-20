@@ -19,7 +19,7 @@
 				</div>
 				<div class="form-group">
 					<label for="writer">Writer:</label>
-					<input type="text" class="form-control" id="writer" placeholder="Enter writer" name="writer">
+					<input type="text" class="form-control" id="writer" readonly="readonly" value="<%=memberDTO.getId()%>" name="writer">
 				</div>
 				<button type="submit" class="btn btn-danger">write</button>
 			</form>

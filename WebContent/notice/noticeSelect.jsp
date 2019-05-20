@@ -36,12 +36,14 @@
 			<td> <%=noticeDTO.getReg_date() %></td>
 			<td> <%=noticeDTO.getHit() %></td>
 		</tr>
-		<%} %>
 		</table>
+		<%} %>
+		<%if(memberDTO !=null && memberDTO.getId().equals("admin")){ %>
 		<div class="container">
-			<a href = "./noticeUpdate.jsp?num=<%=noticeDTO.getNum() %>"> UPDATE</a>
+			<a href = "./noticeUpdateCheck.jsp?num=<%=noticeDTO.getNum() %>"> UPDATE</a>
 			<a href="./noticeDelete.jsp?num=<%=noticeDTO.getNum()%>">DELTE</a>
 		</div>
+		<%} %>
 	</div>
 </div>
 <%@ include file="../temp/footer.jsp" %>

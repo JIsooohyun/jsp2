@@ -1,24 +1,38 @@
 <%@page import="com.sh.member.MemberDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<% 
-request.setCharacterEncoding("UTF-8");
-response.setCharacterEncoding("UTF-8");
+	pageEncoding="UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+	response.setCharacterEncoding("UTF-8");
 %>
-<jsp:useBean id="memberDTO" class="com.sh.member.MemberDTO"/>
-<jsp:setProperty property="*" name="memberDTO"/>
+<jsp:useBean id="memberDTO" class="com.sh.member.MemberDTO" />
+<jsp:setProperty property="*" name="memberDTO" />
 <%
 	MemberDAO memberDAO = new MemberDAO();
-	memberDTO =  memberDAO.memberLogin(memberDTO);
 	
+
+	//체크박스의 값 확인
+	String check = request.getParameter("remember");
+	//System.out.println(check); //on이 넘어온다. 
+
+	//쿠키 생성
+	if (check!=null) {
+		Cookie c = new Cookie("check", memberDTO.getId()); //("쿠키이름", value);
+		c.setMaxAge(60*60*4_27);	
+		response.addCookie(c);
+	}else{
+		Cookie c = new Cookie("check",""); //("쿠키이름", value);
+		response.addCookie(c);
+	}
+	memberDTO = memberDAO.memberLogin(memberDTO);
 	//포워딩과 리다이렉트 둘 다 사용하기 
-	if(memberDTO!=null){
+	if (memberDTO != null) {
 		/* RequestDispatcher view = request.getRequestDispatcher("../index.jsp");
 		view.forward(request, response);
 		이렇게 사용하면 주소가 이상해지면서 나중에 망가진다. 그래서 리다이렉트로 보낸다.*/
-		session.setAttribute("member",memberDTO);//키는 내맘대로 만든다. (키, 밸류)
+		session.setAttribute("member", memberDTO);//키는 내맘대로 만든다. (키, 밸류)
 		response.sendRedirect("../index.jsp");
-	}else{
+	} else {
 		request.setAttribute("message", "Login Fail");
 		request.setAttribute("path", "./memberLogin.jsp");
 		RequestDispatcher view = request.getRequestDispatcher("../common/test/result.jsp");
@@ -33,8 +47,8 @@ response.setCharacterEncoding("UTF-8");
 <title>Insert title here</title>
 </head>
 <body>
-<div class="row">
-<h1> MemberLoginProcess 로그인처리</h1>
-</div>
+	<div class="row">
+		<h1>MemberLoginProcess 로그인처리</h1>
+	</div>
 </body>
 </html>
